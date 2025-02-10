@@ -12,15 +12,15 @@ public interface UserService {
 
     public Boolean loadUsersFromExternalAPI(JSONArray usersArray);
 
-    public List<User> findByFirstName(String firstName);
+    public List<UserDto> findByFirstName(String firstName);
 
-    public List<User> findByLastName(String lastName);
+    public List<UserDto> findByLastName(String lastName);
 
     public JSONObject getDataFromExternalAPI();
 
     public List<UserDto> findAllUser();
 
-    public List<User> doFreeSearch(String searchStr);
+    public List<UserDto> findBySsn(String ssn);
 
-    public List<User> findBySsn(String ssn);
+    public UserDto findUserById(Integer id);
 }

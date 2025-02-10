@@ -1,5 +1,6 @@
 package com.ps.assignment.employeeManagement.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -75,23 +76,135 @@ public class UserController {
     }
 
     @PostMapping("/findByFirstName")
-    public ResponseEntity<List<User>> findByFirstName(@RequestBody JSONObject requestData) {
-        LOG.info("Finding users by first name :: " + requestData.get("firstName"));
-        List<User> users = userService.findByFirstName(requestData.get("firstName").toString());
-        return users != null ? ResponseEntity.ok(users) : ResponseEntity.badRequest().body(null);
+    public GenericResult findByFirstName(@RequestBody JSONObject requestData) {
+        LOG.info("Finding users by first name :: " + requestData.get("name"));
+        GenericResult result = new GenericResult();
+        List<UserDto> users = null;
+        try {
+            users = userService.findByFirstName(requestData.get("name").toString());
+            if (!users.isEmpty()) {
+                result.setStatus("SUCCESS");
+                result.setMessage("Users found successfully");
+                result.setSuccess(true);
+                result.setData(users);
+            } else {
+                result.setStatus("FAILURE");
+                result.setMessage("Failed to find users");
+                result.setSuccess(true);
+            }
+        } catch (Exception e) {
+            LOG.error("Error finding users by first name :: " + e.getMessage());
+            result.setStatus("FAILURE");
+            result.setMessage("Error finding users by first name :: " + e.getMessage());
+            result.setSuccess(false);
+        }
+        return result;
     }
 
     @PostMapping("/findByLastName")
-    public ResponseEntity<List<User>> findByLastName(@RequestBody String lastName) {
-        LOG.info("Finding users by last name :: " + lastName);
-        List<User> users = userService.findByLastName(lastName);
-        return users != null ? ResponseEntity.ok(users) : ResponseEntity.badRequest().body(null);
+    public GenericResult findByLastName(@RequestBody JSONObject requestData) {
+        LOG.info("Finding users by Last name :: " + requestData.get("name"));
+        GenericResult result = new GenericResult();
+        List<UserDto> users = null;
+        try {
+            users = userService.findByLastName(requestData.get("name").toString());
+            if (!users.isEmpty()) {
+                result.setStatus("SUCCESS");
+                result.setMessage("Users found successfully");
+                result.setSuccess(true);
+                result.setData(users);
+            } else {
+                result.setStatus("FAILURE");
+                result.setMessage("Failed to find users");
+                result.setSuccess(true);
+            }
+        } catch (Exception e) {
+            LOG.error("Error finding users by first name :: " + e.getMessage());
+            result.setStatus("FAILURE");
+            result.setMessage("Error finding users by first name :: " + e.getMessage());
+            result.setSuccess(false);
+        }
+        return result;
+    }
+
+    @PostMapping("/findBySsn")
+    public GenericResult findBySsn(@RequestBody JSONObject requestData) {
+        LOG.info("Finding users by Ssn :: " + requestData.get("name"));
+        GenericResult result = new GenericResult();
+        List<UserDto> users = null;
+        try {
+            users = userService.findBySsn(requestData.get("ssn").toString());
+            if (!users.isEmpty()) {
+                result.setStatus("SUCCESS");
+                result.setMessage("Users found successfully");
+                result.setSuccess(true);
+                result.setData(users);
+            } else {
+                result.setStatus("FAILURE");
+                result.setMessage("Failed to find users");
+                result.setSuccess(true);
+            }
+        } catch (Exception e) {
+            LOG.error("Error finding users by first name :: " + e.getMessage());
+            result.setStatus("FAILURE");
+            result.setMessage("Error finding users by first name :: " + e.getMessage());
+            result.setSuccess(false);
+        }
+        return result;
     }
 
     @PostMapping("/doFreeSearch")
-    public ResponseEntity<List<User>> doFreeSearch(@RequestBody JSONObject requestData) {
+    public GenericResult doFreeSearch(@RequestBody JSONObject requestData) {
         LOG.info("Doing free search :: " + requestData.get("searchStr"));
-        List<User> users = userService.doFreeSearch(requestData.get("searchStr").toString());
-        return users != null ? ResponseEntity.ok(users) : ResponseEntity.badRequest().body(null);
+        GenericResult result = new GenericResult();
+        List<UserDto> users = new ArrayList<>();
+        try {
+            users.addAll(userService.findByFirstName(requestData.get("name").toString()));
+            users.addAll(userService.findByLastName(requestData.get("name").toString()));
+            users.addAll(userService.findBySsn(requestData.get("name").toString()));
+            if (!users.isEmpty()) {
+                result.setStatus("SUCCESS");
+                result.setMessage("Users found successfully");
+                result.setSuccess(true);
+                result.setData(users);
+            } else {
+                result.setStatus("FAILURE");
+                result.setMessage("Failed to find users");
+                result.setSuccess(true);
+            }
+        } catch (Exception e) {
+            result.setStatus("FAILURE");
+            result.setMessage("Failed to find users");
+            result.setSuccess(false);
+            LOG.error("Error doing free search :: " + e.getMessage());
+        }
+        return result;
+    }
+
+    @PostMapping("/findUserById")
+    public GenericResult findUserById(@RequestBody JSONObject requestData) {
+        LOG.info("Finding user by id :: " + requestData.get("id"));
+        GenericResult result = new GenericResult();
+        UserDto user = new UserDto();
+        try {
+            Integer id = Integer.parseInt(requestData.get("id").toString());
+            user = userService.findUserById(id);
+            if (user != null) {
+                result.setStatus("SUCCESS");
+                result.setMessage("User found successfully");
+                result.setSuccess(true);
+                result.setData(user);
+            } else {
+                result.setStatus("FAILED");
+                result.setSuccess(true);
+                result.setMessage("User not found");
+            }
+        } catch (Exception e) {
+            result.setStatus("FAILURE");
+            result.setMessage("Failed to find user");
+            result.setSuccess(false);
+            LOG.error("Error finding user by id :: " + e.getMessage());
+        }
+        return result;
     }
 }

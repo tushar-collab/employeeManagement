@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -22,6 +23,9 @@ import com.ps.assignment.employeeManagement.repository.CoordinatesRepository;
 import com.ps.assignment.employeeManagement.repository.CryptoRepository;
 import com.ps.assignment.employeeManagement.repository.HairRepository;
 import com.ps.assignment.employeeManagement.repository.UserRepository;
+import com.ps.assignment.employeeManagement.service.UserService;
+
+import jakarta.annotation.PostConstruct;
 
 @Component
 public class UserHelper {
@@ -48,6 +52,8 @@ public class UserHelper {
 
     @Autowired
     private CompanyRepository companyRepository;
+
+
 
     public Coordinates findAndSaveCoordinates(JSONObject coordinates) {
         String lat = Double.toString(coordinates.getDouble("lat"));
