@@ -8,6 +8,7 @@ import org.springframework.web.client.RestTemplate;
 @Component
 public class ExternalApiCaller {
 
+    @Autowired
     private RestTemplate restTemplate;
 
     @Value("${employeeManagement.startupConfigs.thirdPartyApi}")
