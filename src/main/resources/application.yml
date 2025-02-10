@@ -62,6 +62,8 @@ resilience4j:
     metrics:
       enabled: true
     instances:
-      timeLimiterApi:
+      apiLoaderLimiter:
         timeout-duration: 2s
         cancel-running-future: true
+
+

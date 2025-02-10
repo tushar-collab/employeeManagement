@@ -1,5 +1,6 @@
 package com.ps.assignment.employeeManagement.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ps.assignment.employeeManagement.config.ExternalApiCaller;
+import com.ps.assignment.employeeManagement.dto.UserDto;
 import com.ps.assignment.employeeManagement.helper.UserHelper;
 import com.ps.assignment.employeeManagement.model.Address;
 import com.ps.assignment.employeeManagement.model.Bank;
@@ -24,6 +26,9 @@ import com.ps.assignment.employeeManagement.model.Hair;
 import com.ps.assignment.employeeManagement.model.User;
 import com.ps.assignment.employeeManagement.repository.UserRepository;
 import com.ps.assignment.employeeManagement.service.UserService;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -38,6 +43,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private ExternalApiCaller externalApiCaller;
+
+    @Autowired
+    private EntityManager entityManager;
 
     @Value("${employeeManagement.startupConfigs.thirdPartyApi}")
     private String API_URL;
@@ -87,6 +95,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<UserDto> findAllUser() {
+        LOG.info("In findAllUser()");
+        List<UserDto> users = null;
+        String hqlQuery = "Select new com.ps.assignment.employeeManagement.dto.UserDto(u.id, u.firstName, u.lastName, u.maidenName, u.email, u.phone, u.company.department, u.age, u.university) FROM User u";
+        try {
+            TypedQuery<UserDto> query = entityManager.createQuery(hqlQuery, UserDto.class);
+            users = query.getResultList();
+            LOG.info("Users found !!");
+        } catch (Exception e) {
+            LOG.error("Failed to fetch users from external API" + e.getMessage(), e);
+        }
+        return users;
+    }
+
+    @Override
     public List<User> findByFirstName(String firstName) {
         LOG.info("In findByFirstName()");
         Optional<List<User>> users = Optional.empty();
@@ -108,5 +131,41 @@ public class UserServiceImpl implements UserService {
             LOG.error("Failed to fetch users from external API" + e.getMessage(), e);
         }
         return users.isPresent() ? users.get() : null;
+    }
+
+    @Override
+    public List<User> findBySsn(String ssn) {
+        LOG.info("In findBySsn()");
+        Optional<List<User>> users = Optional.empty();
+        try {
+            users = userRepository.findBySsn(ssn);
+        } catch (Exception e) {
+            LOG.error("Failed to fetch users from external API" + e.getMessage(), e);
+        }
+        return users.isPresent() ? users.get() : null;
+    }
+
+    @Override
+    public List<User> doFreeSearch(String searchStr) {
+        LOG.info("In doFreeSearch()");
+        List<User> users = new ArrayList<>();
+        try {
+            Optional<List<User>> usersByFirstName = userRepository.findByFirstName(searchStr);
+            Optional<List<User>> usersByLastName = userRepository.findByLastName(searchStr);
+            Optional<List<User>> usersBySsn = userRepository.findBySsn(searchStr);
+            if (usersByFirstName.isPresent()) {
+                users.addAll(usersByFirstName.get());
+            }
+            if (usersByLastName.isPresent()) {
+                users.addAll(usersByLastName.get());
+            }
+            if (usersBySsn.isPresent()) {
+                users.addAll(usersBySsn.get());
+            }
+
+        } catch (Exception e) {
+            LOG.error("Failed to fetch users from external API" + e.getMessage(), e);
+        }
+        return users;
     }
 }

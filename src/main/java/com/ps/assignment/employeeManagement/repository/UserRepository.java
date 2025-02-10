@@ -19,4 +19,8 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     @Query("SELECT u FROM User u WHERE u.lastName LIKE %?1%")
     public Optional<List<User>> findByLastName(String lastName);
+
+    @Query("SELECT u FROM User u WHERE u.ssn LIKE %?1%")
+    public Optional<List<User>> findBySsn(String ssn);
+    
 }
