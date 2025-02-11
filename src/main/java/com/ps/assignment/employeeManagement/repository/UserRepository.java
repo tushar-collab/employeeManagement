@@ -19,13 +19,13 @@ public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecifi
     @Query("Select u.id, u.firstName, u.lastName, u.maidenName, u.email, u.phone,u.company.department, u.age, u.ssn from User u")
     public List<Object[]> fetchUsers();
 
-    @Query("Select u.id, u.firstName, u.lastName, u.maidenName, u.email, u.phone,u.company.department, u.age, u.university from User u where u.firstName LIKE %:fName%")
+    @Query("Select u.id, u.firstName, u.lastName, u.maidenName, u.email, u.phone,u.company.department, u.age, u.ssn from User u where u.firstName LIKE %:fName%")
     public Optional<List<Object[]>> findUsersByFirstName(@Param("fName") String firstName);
 
-    @Query("Select u.id, u.firstName, u.lastName, u.maidenName, u.email, u.phone,u.company.department, u.age, u.university from User u where u.lastName LIKE %:lName%")
+    @Query("Select u.id, u.firstName, u.lastName, u.maidenName, u.email, u.phone,u.company.department, u.age, u.ssn from User u where u.lastName LIKE %:lName%")
     public Optional<List<Object[]>> findUsersByLastName(@Param("lName") String lastName);
 
-    @Query("Select u.id, u.firstName, u.lastName, u.maidenName, u.email, u.phone,u.company.department, u.age, u.university from User u where u.ssn LIKE %:ssn%")
+    @Query("Select u.id, u.firstName, u.lastName, u.maidenName, u.email, u.phone,u.company.department, u.age, u.ssn from User u where u.ssn LIKE %:ssn%")
     public Optional<List<Object[]>> findUsersBySsn(@Param("ssn") String ssn);
 
     public Optional<User> findById(Integer id);
