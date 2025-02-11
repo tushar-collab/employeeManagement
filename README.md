@@ -21,3 +21,5 @@ This springboot based project consist of all the required backend entities:
 10. This documentation is made using swagger-ui
 
 11. By default the service is runnin gon port 8080.
+
+please refer to git project for UI project - https://github.com/tushar-collab/employee-management-client
