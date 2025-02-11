@@ -16,7 +16,7 @@ public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecifi
 
     public Optional<User> findByEmail(String email);
 
-    @Query("Select u.id, u.firstName, u.lastName, u.maidenName, u.email, u.phone,u.company.department, u.age, u.university from User u")
+    @Query("Select u.id, u.firstName, u.lastName, u.maidenName, u.email, u.phone,u.company.department, u.age, u.ssn from User u")
     public List<Object[]> fetchUsers();
 
     @Query("Select u.id, u.firstName, u.lastName, u.maidenName, u.email, u.phone,u.company.department, u.age, u.university from User u where u.firstName LIKE %:fName%")

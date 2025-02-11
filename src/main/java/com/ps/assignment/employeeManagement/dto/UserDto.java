@@ -1,57 +1,161 @@
 package com.ps.assignment.employeeManagement.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(description = "User details", name = "Users")
 public class UserDto {
 
+    @Schema(description = "User id", example = "1")
     private Long id;
+
+    @Schema(description = "User first name", example = "John")
     private String firstName;
+
+    @Schema(description = "User last name", example = "Doe")
     private String lastName;
+
+    @Schema(description = "User maiden name", example = "Smith")
     private String maidenName;
+
+    @Schema(description = "User email", example = "abc@gmail.com")
     private String email;
+
+    @Schema(description = "User phone", example = "1234567890")
     private String phone;
+
+    @Schema(description = "User age", example = "25")
     private Integer age;
+
+    @Schema(description = "User university", example = "XYZ University")
     private String university;
+
+    @Schema(description = "User name", example = "john.doe")
     private String userName;
+
+    @Schema(description = "User password", example = "password")
     private String password;
+
+    @Schema(description = "User birth date", example = "01-01-1990")
     private String birthDate;
+
+    @Schema(description = "User image", example = "image.jpg")
     private String image;
+
+    @Schema(description = "User blood group", example = "A+")
     private String bloodGroup;
+
+    @Schema(description = "User height", example = "5.8")
     private Double height;
+
+    @Schema(description = "User weight", example = "70")
     private Double weight;
+
+    @Schema(description = "User eye color", example = "Brown")
     private String eyeColor;
+
+    @Schema(description = "User hair color", example = "Black")
     private String hairColor;
+
+    @Schema(description = "User hair type", example = "Curly")
     private String hairType;
+
+    @Schema(description = "User ip", example = "10.50.556.04")
     private String ip;
+
+    @Schema(description = "User mac address", example = "00:0a:95:9d:68:16")
     private String macAddress;
+
+    @Schema(description = "User address", example = "123, Main Street")
     private String address;
+
+    @Schema(description = "User city", example = "New York")
     private String city;
+
+    @Schema(description = "User state", example = "New York")
     private String state;
+
+    @Schema(description = "User state code", example = "NY")
     private String stateCode;
+
+    @Schema(description = "User country", example = "USA")
     private String country;
+
+    @Schema(description = "User postal code", example = "10001")
     private String postalCode;
+
+    @Schema(description = "User address latitude", example = "40.7128")
     private String addressLat;
+
+    @Schema(description = "User address longitude", example = "74.0060")
     private String addressLong;
+
+    @Schema(description = "User card expire", example = "01-01-2025")
     private String cardExpire;
+
+    @Schema(description = "User card number", example = "1234 5678 9012 3456")
     private String cardNumber;
+
+    @Schema(description = "User card type", example = "Visa")
     private String cardType;
+
+    @Schema(description = "User currency", example = "USD")
     private String currency;
+
+    @Schema(description = "User iban", example = "US123456789")
     private String iban;
+
+    @Schema(description = "User company name", example = "ABC Corp")
     private String companyName;
+
+    @Schema(description = "User department", example = "IT")
     private String department;
+
+    @Schema(description = "User title", example = "Software Engineer")
     private String title;
+
+    @Schema(description = "User company address", example = "123, Main Street")
     private String companyAddress;
+
+    @Schema(description = "User company city", example = "New York")
     private String companyCity;
+
+    @Schema(description = "User company state", example = "New York")
     private String companyState;
+
+    @Schema(description = "User company state code", example = "NY")
     private String companyStateCode;
+
+    @Schema(description = "User company country", example = "USA")
     private String companyCountry;
+
+    @Schema(description = "User company postal code", example = "10001")
     private String companyPostalCode;
+
+    @Schema(description = "User company address latitude", example = "40.7128")
     private String companyAddressLat;
+
+    @Schema(description = "User company address longitude", example = "74.0060")
     private String companyAddressLong;
+
+    @Schema(description = "User EIN", example = "123456789")
     private String ein;
+
+    @Schema(description = "User SSN", example = "123-45-6789")
     private String ssn;
+
+    @Schema(description = "User agent", example = "Mozilla/5.0")
     private String userAgent;
+
+    @Schema(description = "User coin", example = "Bitcoin")
     private String coin;
+
+    @Schema(description = "User wallet", example = "123456789")
     private String wallet;
+
+    @Schema(description = "User network", example = "Facebook")
     private String network;
+
+    @Schema(description = "User role", example = "Admin")
     private String role;
 
     public UserDto() {

@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -23,35 +22,33 @@ import com.ps.assignment.employeeManagement.repository.CoordinatesRepository;
 import com.ps.assignment.employeeManagement.repository.CryptoRepository;
 import com.ps.assignment.employeeManagement.repository.HairRepository;
 import com.ps.assignment.employeeManagement.repository.UserRepository;
-import com.ps.assignment.employeeManagement.service.UserService;
-
-import jakarta.annotation.PostConstruct;
 
 @Component
 public class UserHelper {
 
     private static final Logger LOG = LogManager.getLogger(UserHelper.class);
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final CoordinatesRepository coordinatesRepository;
+    private final AddressRepository addressRepository;
+    private final CryptoRepository cryptoRepository;
+    private final HairRepository hairRepository;
+    private final BankRepository bankRepository;
+    private final CompanyRepository companyRepository;
 
     @Autowired
-    private CoordinatesRepository coordinatesRepository;
-
-    @Autowired
-    private AddressRepository addressRepository;
-
-    @Autowired
-    private CryptoRepository cryptoRepository;
-
-    @Autowired
-    private HairRepository hairRepository;
-
-    @Autowired
-    private BankRepository bankRepository;
-
-    @Autowired
-    private CompanyRepository companyRepository;
+    public UserHelper(UserRepository userRepository, CoordinatesRepository coordinatesRepository,
+                      AddressRepository addressRepository, CryptoRepository cryptoRepository,
+                      HairRepository hairRepository, BankRepository bankRepository,
+                      CompanyRepository companyRepository) {
+        this.userRepository = userRepository;
+        this.coordinatesRepository = coordinatesRepository;
+        this.addressRepository = addressRepository;
+        this.cryptoRepository = cryptoRepository;
+        this.hairRepository = hairRepository;
+        this.bankRepository = bankRepository;
+        this.companyRepository = companyRepository;
+    }
 
 
 

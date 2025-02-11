@@ -3,7 +3,6 @@ package com.ps.assignment.employeeManagement.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,7 +10,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,11 +28,6 @@ import com.ps.assignment.employeeManagement.repository.UserRepository;
 import com.ps.assignment.employeeManagement.service.UserService;
 
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.TypedQuery;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -49,9 +42,6 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private ExternalApiCaller externalApiCaller;
-
-    @Autowired
-    private EntityManager entityManager;
 
     @Value("${employeeManagement.startupConfigs.thirdPartyApi}")
     private String API_URL;
@@ -117,7 +107,7 @@ public class UserServiceImpl implements UserService {
                 user.setPhone((String) row[5]);
                 user.setCompanyName((String) row[6]);
                 user.setAge((Integer) row[7]);
-                user.setUniversity((String) row[8]);
+                user.setSsn((String) row[8]);
                 users.add(user);
             });
         } catch (Exception e) {
