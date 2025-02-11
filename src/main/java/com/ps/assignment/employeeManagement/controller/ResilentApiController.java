@@ -13,10 +13,14 @@ import com.ps.assignment.employeeManagement.config.ExternalApiCaller;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/api")
+@Tag(name = "Resilence operations", description = "Resilence operations")
 public class ResilentApiController {
 
     @Autowired
@@ -24,6 +28,8 @@ public class ResilentApiController {
 
     @GetMapping("/circuit-breaker")
     @CircuitBreaker(name = "CircuitBreakerService", fallbackMethod = "fallbackAfterCircuitBreaker")
+    @Operation(summary = "Circuit breaker", description = "Circuit breaker API", tags = { "Resilence operations" })
+    @ApiResponse(responseCode = "201", description = "Circuit state")
     public String circuitBreaker() {
         return externalApiCaller.callApi();
     }
@@ -33,6 +39,8 @@ public class ResilentApiController {
     }
 
     @GetMapping("/retry")
+    @Operation(summary = "Retry", description = "Retry API", tags = { "Resilence operations" })
+    @ApiResponse(responseCode = "201", description = "Retry API")
     @Retry(name = "retryApi", fallbackMethod = "fallbackAfterRetry")
     public String retryApi() {
         return externalApiCaller.callApi();

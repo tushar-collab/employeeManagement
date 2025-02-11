@@ -28,26 +28,29 @@ public class UserHelper {
 
     private static final Logger LOG = LogManager.getLogger(UserHelper.class);
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final CoordinatesRepository coordinatesRepository;
+    private final AddressRepository addressRepository;
+    private final CryptoRepository cryptoRepository;
+    private final HairRepository hairRepository;
+    private final BankRepository bankRepository;
+    private final CompanyRepository companyRepository;
 
     @Autowired
-    private CoordinatesRepository coordinatesRepository;
+    public UserHelper(UserRepository userRepository, CoordinatesRepository coordinatesRepository,
+                      AddressRepository addressRepository, CryptoRepository cryptoRepository,
+                      HairRepository hairRepository, BankRepository bankRepository,
+                      CompanyRepository companyRepository) {
+        this.userRepository = userRepository;
+        this.coordinatesRepository = coordinatesRepository;
+        this.addressRepository = addressRepository;
+        this.cryptoRepository = cryptoRepository;
+        this.hairRepository = hairRepository;
+        this.bankRepository = bankRepository;
+        this.companyRepository = companyRepository;
+    }
 
-    @Autowired
-    private AddressRepository addressRepository;
 
-    @Autowired
-    private CryptoRepository cryptoRepository;
-
-    @Autowired
-    private HairRepository hairRepository;
-
-    @Autowired
-    private BankRepository bankRepository;
-
-    @Autowired
-    private CompanyRepository companyRepository;
 
     public Coordinates findAndSaveCoordinates(JSONObject coordinates) {
         String lat = Double.toString(coordinates.getDouble("lat"));

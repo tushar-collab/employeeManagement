@@ -28,7 +28,6 @@ import com.ps.assignment.employeeManagement.repository.UserRepository;
 import com.ps.assignment.employeeManagement.service.UserService;
 
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.TypedQuery;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -43,9 +42,6 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private ExternalApiCaller externalApiCaller;
-
-    @Autowired
-    private EntityManager entityManager;
 
     @Value("${employeeManagement.startupConfigs.thirdPartyApi}")
     private String API_URL;
@@ -97,75 +93,201 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDto> findAllUser() {
         LOG.info("In findAllUser()");
-        List<UserDto> users = null;
-        String hqlQuery = "Select new com.ps.assignment.employeeManagement.dto.UserDto(u.id, u.firstName, u.lastName, u.maidenName, u.email, u.phone, u.company.department, u.age, u.university) FROM User u";
+        List<UserDto> users = new ArrayList<>();
         try {
-            TypedQuery<UserDto> query = entityManager.createQuery(hqlQuery, UserDto.class);
-            users = query.getResultList();
-            LOG.info("Users found !!");
+            List<Object[]> result = userRepository.fetchUsers();
+            LOG.info("Total users found :: " + result.size());
+            result.forEach(row -> {
+                UserDto user = new UserDto();
+                user.setId((Long) row[0]);
+                user.setFirstName((String) row[1]);
+                user.setLastName((String) row[2]);
+                user.setMaidenName((String) row[3]);
+                user.setEmail((String) row[4]);
+                user.setPhone((String) row[5]);
+                user.setCompanyName((String) row[6]);
+                user.setAge((Integer) row[7]);
+                user.setSsn((String) row[8]);
+                users.add(user);
+            });
         } catch (Exception e) {
             LOG.error("Failed to fetch users from external API" + e.getMessage(), e);
         }
+        LOG.info("Users found !!");
         return users;
     }
 
     @Override
-    public List<User> findByFirstName(String firstName) {
+    public List<UserDto> findByFirstName(String firstName) {
         LOG.info("In findByFirstName()");
-        Optional<List<User>> users = Optional.empty();
+        List<UserDto> list = new ArrayList<>();
+        Optional<List<Object[]>> users = Optional.empty();
         try {
-            users = userRepository.findByFirstName(firstName);
+            users = userRepository.findUsersByFirstName(firstName);
+            if (users.isPresent()) {
+                List<Object[]> userList = users.get();
+                for (Object[] row : userList) {
+                    UserDto user = new UserDto();
+                    user.setId((Long) row[0]);
+                    user.setId((Long) row[0]);
+                    user.setFirstName((String) row[1]);
+                    user.setLastName((String) row[2]);
+                    user.setMaidenName((String) row[3]);
+                    user.setEmail((String) row[4]);
+                    user.setPhone((String) row[5]);
+                    user.setCompanyName((String) row[6]);
+                    user.setAge((Integer) row[7]);
+                    user.setUniversity((String) row[8]);
+                    list.add(user);
+                }
+            }
         } catch (Exception e) {
             LOG.error("Failed to fetch users from external API" + e.getMessage(), e);
         }
-        return users.isPresent() ? users.get() : null;
+        return list;
     }
 
     @Override
-    public List<User> findByLastName(String lastName) {
+    public List<UserDto> findByLastName(String lastName) {
         LOG.info("In findByLastName()");
-        Optional<List<User>> users = Optional.empty();
+        List<UserDto> list = new ArrayList<>();
+        Optional<List<Object[]>> users = Optional.empty();
         try {
-            users = userRepository.findByLastName(lastName);
+            users = userRepository.findUsersByLastName(lastName);
+            if (users.isPresent()) {
+                List<Object[]> userList = users.get();
+                for (Object[] row : userList) {
+                    UserDto user = new UserDto();
+                    user.setId((Long) row[0]);
+                    user.setId((Long) row[0]);
+                    user.setFirstName((String) row[1]);
+                    user.setLastName((String) row[2]);
+                    user.setMaidenName((String) row[3]);
+                    user.setEmail((String) row[4]);
+                    user.setPhone((String) row[5]);
+                    user.setCompanyName((String) row[6]);
+                    user.setAge((Integer) row[7]);
+                    user.setUniversity((String) row[8]);
+                    list.add(user);
+                }
+            }
         } catch (Exception e) {
             LOG.error("Failed to fetch users from external API" + e.getMessage(), e);
         }
-        return users.isPresent() ? users.get() : null;
+        return list;
     }
 
     @Override
-    public List<User> findBySsn(String ssn) {
+    public List<UserDto> findBySsn(String ssn) {
         LOG.info("In findBySsn()");
-        Optional<List<User>> users = Optional.empty();
+        List<UserDto> list = new ArrayList<>();
+        Optional<List<Object[]>> users = Optional.empty();
         try {
-            users = userRepository.findBySsn(ssn);
+            users = userRepository.findUsersBySsn(ssn);
+            if (users.isPresent()) {
+                List<Object[]> userList = users.get();
+                for (Object[] row : userList) {
+                    UserDto user = new UserDto();
+                    user.setId((Long) row[0]);
+                    user.setId((Long) row[0]);
+                    user.setFirstName((String) row[1]);
+                    user.setLastName((String) row[2]);
+                    user.setMaidenName((String) row[3]);
+                    user.setEmail((String) row[4]);
+                    user.setPhone((String) row[5]);
+                    user.setCompanyName((String) row[6]);
+                    user.setAge((Integer) row[7]);
+                    user.setUniversity((String) row[8]);
+                    list.add(user);
+                }
+            }
         } catch (Exception e) {
             LOG.error("Failed to fetch users from external API" + e.getMessage(), e);
         }
-        return users.isPresent() ? users.get() : null;
+        return list;
     }
 
     @Override
-    public List<User> doFreeSearch(String searchStr) {
-        LOG.info("In doFreeSearch()");
-        List<User> users = new ArrayList<>();
+    public UserDto findUserById(Integer id) {
+        LOG.info("In findUserById()");
+        UserDto userDto = new UserDto();
         try {
-            Optional<List<User>> usersByFirstName = userRepository.findByFirstName(searchStr);
-            Optional<List<User>> usersByLastName = userRepository.findByLastName(searchStr);
-            Optional<List<User>> usersBySsn = userRepository.findBySsn(searchStr);
-            if (usersByFirstName.isPresent()) {
-                users.addAll(usersByFirstName.get());
-            }
-            if (usersByLastName.isPresent()) {
-                users.addAll(usersByLastName.get());
-            }
-            if (usersBySsn.isPresent()) {
-                users.addAll(usersBySsn.get());
-            }
+            Optional<User> user = userRepository.findById(id);
+            if (user.isPresent()) {
+                LOG.info("User fetched !!");
+                User userObj = user.get();
+                userDto.setId(userObj.getId());
+                userDto.setFirstName(userObj.getFirstName());
+                userDto.setLastName(userObj.getLastName());
+                userDto.setMaidenName(userObj.getMaidenName());
+                userDto.setEmail(userObj.getEmail());
+                userDto.setPhone(userObj.getPhone());
+                userDto.setAge(userObj.getAge());
+                userDto.setUniversity(userObj.getUniversity());
+                userDto.setUserName(userObj.getUsername());
+                userDto.setPassword(userObj.getPassword());
+                userDto.setBirthDate(userObj.getBirthDate());
+                userDto.setImage(userObj.getImage());
+                userDto.setBloodGroup(userObj.getBloodGroup());
+                userDto.setHeight(userObj.getHeight());
+                userDto.setWeight(userObj.getWeight());
+                userDto.setEyeColor(userObj.getEyeColor());
+                userDto.setHairColor(userObj.getHair().getColor());
+                userDto.setHairType(userObj.getHair().getType());
+                userDto.setIp(userObj.getIp());
+                userDto.setMacAddress(userObj.getMacAddress());
+                if (userObj.getAddress() != null) {
+                    userDto.setAddress(userObj.getAddress().getAddress());
+                    userDto.setCity(userObj.getAddress().getCity());
+                    userDto.setState(userObj.getAddress().getState());
+                    userDto.setStateCode(userObj.getAddress().getStateCode());
+                    userDto.setCountry(userObj.getAddress().getCountry());
+                    userDto.setPostalCode(userObj.getAddress().getPostalCode());
+                    if (userObj.getAddress().getCoordinates() != null) {
+                        userDto.setAddressLat(userObj.getAddress().getCoordinates().getLat());
+                        userDto.setAddressLong(userObj.getAddress().getCoordinates().getLng());
+                    }
+                }
+                if (userObj.getBank() != null) {
+                    userDto.setCardExpire(userObj.getBank().getCardExpire());
+                    userDto.setCardNumber(userObj.getBank().getCardNumber());
+                    userDto.setCardType(userObj.getBank().getCardType());
+                    userDto.setCurrency(userObj.getBank().getCurrency());
+                    userDto.setIban(userObj.getBank().getIban());
 
+                }
+                if (userObj.getCompany() != null) {
+                    userDto.setCompanyName(userObj.getCompany().getName());
+                    userDto.setDepartment(userObj.getCompany().getDepartment());
+                    userDto.setTitle(userObj.getCompany().getTitle());
+                    if (userObj.getCompany().getAddress() != null) {
+                        userDto.setCompanyAddress(userObj.getCompany().getAddress().getAddress());
+                        userDto.setCompanyCity(userObj.getCompany().getAddress().getCity());
+                        userDto.setCompanyState(userObj.getCompany().getAddress().getState());
+                        userDto.setCompanyStateCode(userObj.getCompany().getAddress().getStateCode());
+                        userDto.setCompanyCountry(userObj.getCompany().getAddress().getCountry());
+                        userDto.setCompanyPostalCode(userObj.getCompany().getAddress().getPostalCode());
+                        if (userObj.getCompany().getAddress().getCoordinates() != null) {
+                            userDto.setCompanyAddressLat(userObj.getCompany().getAddress().getCoordinates().getLat());
+                            userDto.setCompanyAddressLong(userObj.getCompany().getAddress().getCoordinates().getLng());
+                        }
+                    }
+                }
+                userDto.setEin(userObj.getEin());
+                userDto.setSsn(userObj.getSsn());
+                userDto.setUserAgent(userObj.getUserAgent());
+                if (userObj.getCrypto() != null) {
+                    userDto.setCoin(userObj.getCrypto().getCoin());
+                    userDto.setWallet(userObj.getCrypto().getWallet());
+                    userDto.setNetwork(userObj.getCrypto().getNetwork());
+
+                }
+                userDto.setRole(userObj.getRole());
+            }
         } catch (Exception e) {
-            LOG.error("Failed to fetch users from external API" + e.getMessage(), e);
+            LOG.error("Failed to fetch user from external API" + e.getMessage(), e);
         }
-        return users;
+        return userDto;
     }
+
 }
