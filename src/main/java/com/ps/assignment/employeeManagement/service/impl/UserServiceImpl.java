@@ -137,7 +137,7 @@ public class UserServiceImpl implements UserService {
                     user.setPhone((String) row[5]);
                     user.setCompanyName((String) row[6]);
                     user.setAge((Integer) row[7]);
-                    user.setUniversity((String) row[8]);
+                    user.setSsn((String) row[8]);
                     list.add(user);
                 }
             }
@@ -167,7 +167,7 @@ public class UserServiceImpl implements UserService {
                     user.setPhone((String) row[5]);
                     user.setCompanyName((String) row[6]);
                     user.setAge((Integer) row[7]);
-                    user.setUniversity((String) row[8]);
+                    user.setSsn((String) row[8]);
                     list.add(user);
                 }
             }
@@ -197,7 +197,7 @@ public class UserServiceImpl implements UserService {
                     user.setPhone((String) row[5]);
                     user.setCompanyName((String) row[6]);
                     user.setAge((Integer) row[7]);
-                    user.setUniversity((String) row[8]);
+                    user.setSsn((String) row[8]);
                     list.add(user);
                 }
             }
