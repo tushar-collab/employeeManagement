@@ -27,7 +27,7 @@ import com.ps.assignment.employeeManagement.model.User;
 import com.ps.assignment.employeeManagement.repository.UserRepository;
 import com.ps.assignment.employeeManagement.service.UserService;
 
-import jakarta.persistence.EntityManager;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -47,6 +47,7 @@ public class UserServiceImpl implements UserService {
     private String API_URL;
 
     @Override
+    @CircuitBreaker(name = "externalApiCallerCircuitBreaker", fallbackMethod = "fallbackGetDataFromExternalAPI")
     public JSONObject getDataFromExternalAPI() {
         LOG.info("In getDataFromExternalAPI()");
         JSONObject result = null;
@@ -54,9 +55,14 @@ public class UserServiceImpl implements UserService {
             String response = externalApiCaller.callApi();
             result = new JSONObject(response);
         } catch (Exception e) {
-            LOG.error("Error while fetching data from external API" + e.getMessage(), e);
+            throw e;
         }
         return result;
+    }
+
+    public JSONObject fallbackGetDataFromExternalAPI(Throwable t) {
+        LOG.error("Fallback method called due to: " + t.getMessage(), t);
+        return new JSONObject().put("error", "External API call failed");
     }
 
     @Override
@@ -283,11 +289,35 @@ public class UserServiceImpl implements UserService {
 
                 }
                 userDto.setRole(userObj.getRole());
+            } else {
+                LOG.info("User not found !!");
+                return null;
             }
         } catch (Exception e) {
             LOG.error("Failed to fetch user from external API" + e.getMessage(), e);
         }
         return userDto;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    @CircuitBreaker(name = "externalApiCallerCircuitBreaker", fallbackMethod = "fallbackGetAllUsers")
+    public Boolean doInitialSetup() {
+        Boolean status = false;
+        try {
+            JSONObject usersFromApi = getDataFromExternalAPI();
+            JSONArray usersArray = usersFromApi.getJSONArray("users");
+            loadUsersFromExternalAPI(usersArray);
+            status = true;
+        } catch (Exception e) {
+            throw e; 
+        }
+        return status;
+    }
+
+    public Boolean fallbackGetAllUsers(Throwable t) {
+        LOG.error("Fallback method for getAllUsers called due to: " + t.getMessage(), t);
+        return false;
     }
 
 }

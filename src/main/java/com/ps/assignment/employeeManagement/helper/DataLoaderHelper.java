@@ -19,7 +19,7 @@ public class DataLoaderHelper {
 
     private static final Logger LOG = LogManager.getLogger(DataLoaderHelper.class);
 
-    @PostConstruct
+    // @PostConstruct
     public void loadData() {
         try {
             JSONObject apiData = userService.getDataFromExternalAPI();
