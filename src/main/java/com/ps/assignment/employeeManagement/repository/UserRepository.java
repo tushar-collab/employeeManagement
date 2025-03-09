@@ -16,16 +16,16 @@ public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecifi
 
     public Optional<User> findByEmail(String email);
 
-    @Query("Select u.id, u.firstName, u.lastName, u.maidenName, u.email, u.phone,u.company.department, u.age, u.ssn from User u")
+    @Query("SELECT u.id, u.firstName, u.lastName, u.maidenName, u.email, u.phone, u.company.department, u.age, u.ssn FROM User u")
     public List<Object[]> fetchUsers();
 
-    @Query("Select u.id, u.firstName, u.lastName, u.maidenName, u.email, u.phone,u.company.department, u.age, u.ssn from User u where u.firstName LIKE %:fName%")
+    @Query("SELECT u.id, u.firstName, u.lastName, u.maidenName, u.email, u.phone, u.company.department, u.age, u.ssn FROM User u WHERE LOWER(u.firstName) LIKE LOWER(CONCAT('%', :fName, '%'))")
     public Optional<List<Object[]>> findUsersByFirstName(@Param("fName") String firstName);
 
-    @Query("Select u.id, u.firstName, u.lastName, u.maidenName, u.email, u.phone,u.company.department, u.age, u.ssn from User u where u.lastName LIKE %:lName%")
+    @Query("SELECT u.id, u.firstName, u.lastName, u.maidenName, u.email, u.phone, u.company.department, u.age, u.ssn FROM User u WHERE LOWER(u.lastName) LIKE LOWER(CONCAT('%', :lName, '%'))")
     public Optional<List<Object[]>> findUsersByLastName(@Param("lName") String lastName);
 
-    @Query("Select u.id, u.firstName, u.lastName, u.maidenName, u.email, u.phone,u.company.department, u.age, u.ssn from User u where u.ssn LIKE %:ssn%")
+    @Query("SELECT u.id, u.firstName, u.lastName, u.maidenName, u.email, u.phone, u.company.department, u.age, u.ssn FROM User u WHERE LOWER(u.ssn) LIKE LOWER(CONCAT('%', :ssn, '%'))")
     public Optional<List<Object[]>> findUsersBySsn(@Param("ssn") String ssn);
 
     public Optional<User> findById(Integer id);

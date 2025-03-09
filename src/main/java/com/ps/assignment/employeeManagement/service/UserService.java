@@ -23,4 +23,6 @@ public interface UserService {
     public List<UserDto> findBySsn(String ssn);
 
     public UserDto findUserById(Integer id);
+
+    public Boolean doInitialSetup();
 }
